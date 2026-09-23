@@ -1,89 +1,52 @@
-<body>
+<style>
+  html, body {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    overflow: hidden;
+    background: #000;
+  }
 
-  <div class="player">
-    <div id="player"></div>
-  </div>
+  body {
+    background: url("halloween-background.png") center center / 100% 100% no-repeat fixed;
+    font-family: Arial, sans-serif;
+  }
 
-  <div class="now-playing">
-    <div class="song-title" id="songTitle">Now Playing</div>
-    <div class="artist" id="artistName"></div>
-  </div>
+  .player {
+    position: fixed;
+    width: 1px;
+    height: 1px;
+    left: -10px;
+    top: -10px;
+    opacity: 0;
+    pointer-events: none;
+  }
 
-  <script>
-    const PLAYLIST_ID = "PLPpXqXEr01uYSO_LvTFXDI5Vs04M-8QAY";
+  #player {
+    width: 100%;
+    height: 100%;
+  }
 
-    let ytPlayer;
+  .now-playing {
+    position: fixed;
+    left: 50%;
+    bottom: 14%;
+    transform: translateX(-50%);
+    text-align: center;
+    color: white;
+    text-shadow: 2px 2px 6px #000, -1px -1px 4px #000;
+    pointer-events: none;
+    width: 90%;
+  }
 
-    function onYouTubeIframeAPIReady() {
-      ytPlayer = new YT.Player("player", {
-        width: "100%",
-        height: "100%",
-        playerVars: {
-          listType: "playlist",
-          list: PLAYLIST_ID,
-          rel: 0,
-          playsinline: 1
-        },
-        events: {
-          onReady: startRadioStylePlayback,
-          onError: skipUnavailableVideo,
-          onStateChange: onPlayerStateChange
-        }
-      });
-    }
+  .song-title {
+    font-size: 28px;
+    font-weight: bold;
+    margin-bottom: 6px;
+  }
 
-    function startRadioStylePlayback(event) {
-      const player = event.target;
-
-      player.setShuffle(true);
-
-      setTimeout(function() {
-        const playlist = player.getPlaylist();
-
-        if (playlist && playlist.length) {
-          const randomIndex =
-            Math.floor(Math.random() * playlist.length);
-
-          player.playVideoAt(randomIndex);
-        }
-      }, 1000);
-    }
-
-    function updateNowPlaying() {
-      if (!ytPlayer) return;
-
-      const title = ytPlayer.getVideoData().title;
-
-      if (!title) return;
-
-      document.getElementById("songTitle").textContent = title;
-    }
-
-    function skipUnavailableVideo(event) {
-      console.log("Video unavailable. Skipping to the next song.");
-
-      setTimeout(function() {
-        if (ytPlayer) {
-          ytPlayer.nextVideo();
-        }
-      }, 500);
-    }
-
-    function onPlayerStateChange(event) {
-      if (event.data === YT.PlayerState.PLAYING) {
-        updateNowPlaying();
-      }
-
-      if (event.data === YT.PlayerState.ENDED) {
-        setTimeout(function() {
-          if (ytPlayer) {
-            ytPlayer.nextVideo();
-          }
-        }, 300);
-      }
-    }
-  </script>
-
-  <script src="https://www.youtube.com/iframe_api"></script>
-
-</body>
+  .artist {
+    font-size: 19px;
+    font-weight: normal;
+  }
+</style>
