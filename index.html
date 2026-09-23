@@ -1,52 +1,146 @@
-<style>
-  html, body {
-    width: 100%;
-    height: 100%;
-    margin: 0;
-    overflow: hidden;
-    background: #000;
-  }
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Halloween 2026: The Ultimate Spooky Party</title>
 
-  body {
-    background: url("halloween-background.png") center center / 100% 100% no-repeat fixed;
-    font-family: Arial, sans-serif;
-  }
+  <style>
+    html, body {
+      width: 100%;
+      height: 100%;
+      margin: 0;
+      overflow: hidden;
+      background: #000;
+    }
 
-  .player {
-    position: fixed;
-    width: 1px;
-    height: 1px;
-    left: -10px;
-    top: -10px;
-    opacity: 0;
-    pointer-events: none;
-  }
+    body {
+      background: url("halloween-background.png") center center / cover no-repeat fixed;
+      font-family: Arial, sans-serif;
+    }
 
-  #player {
-    width: 100%;
-    height: 100%;
-  }
+    .player {
+      position: fixed;
+      left: 50%;
+      top: 55%;
+      transform: translate(-50%, -50%);
+      width: min(300px, 65vw);
+      aspect-ratio: 16 / 9;
+      box-shadow: 0 8px 30px rgba(0,0,0,.75);
+      border: 2px solid rgba(255,255,255,.35);
+      border-radius: 10px;
+      overflow: hidden;
+      background: #000;
+    }
 
-  .now-playing {
-    position: fixed;
-    left: 50%;
-    bottom: 14%;
-    transform: translateX(-50%);
-    text-align: center;
-    color: white;
-    text-shadow: 2px 2px 6px #000, -1px -1px 4px #000;
-    pointer-events: none;
-    width: 90%;
-  }
+    #player {
+      width: 100%;
+      height: 100%;
+    }
 
-  .song-title {
-    font-size: 28px;
-    font-weight: bold;
-    margin-bottom: 6px;
-  }
+    @media (max-width: 700px) {
+      .player {
+        width: 70vw;
+      }
+    }
+  </style>
+</head>
 
-  .artist {
-    font-size: 19px;
-    font-weight: normal;
-  }
-</style>
+<body>
+
+  <div class="player">
+    <div id="player"></div>
+  </div>
+
+  <script>
+    const PLAYLIST_ID = "PLPpXqXEr01uYSO_LvTFXDI5Vs04M-8QAY";
+
+    let ytPlayer;
+
+    function onYouTubeIframeAPIReady() {
+
+      ytPlayer = new YT.Player("player", {
+
+        width: "100%",
+        height: "100%",
+
+        playerVars: {
+          listType: "playlist",
+          list: PLAYLIST_ID,
+          rel: 0,
+          playsinline: 1
+        },
+
+        events: {
+          onReady: startRadioStylePlayback,
+          onError: skipUnavailableVideo,
+          onStateChange: onPlayerStateChange
+        }
+
+      });
+    }
+
+
+    function startRadioStylePlayback(event) {
+
+      const player = event.target;
+
+      // Turn playlist shuffle on.
+      player.setShuffle(true);
+
+      // Give YouTube time to load the playlist.
+      setTimeout(function() {
+
+        const playlist = player.getPlaylist();
+
+        if (playlist && playlist.length) {
+
+          // Start with a different random song each time.
+          const randomIndex =
+            Math.floor(Math.random() * playlist.length);
+
+          player.playVideoAt(randomIndex);
+        }
+
+      }, 1000);
+    }
+
+
+    function skipUnavailableVideo(event) {
+
+      console.log(
+        "Video unavailable. Skipping to the next song."
+      );
+
+      // Move to the next song instead of stopping the radio.
+      setTimeout(function() {
+
+        if (ytPlayer) {
+          ytPlayer.nextVideo();
+        }
+
+      }, 500);
+    }
+
+
+    function onPlayerStateChange(event) {
+
+      // If a song finishes normally, continue to the next song.
+      if (event.data === YT.PlayerState.ENDED) {
+
+        setTimeout(function() {
+
+          if (ytPlayer) {
+            ytPlayer.nextVideo();
+          }
+
+        }, 300);
+      }
+    }
+
+  </script>
+
+  <script src="https://www.youtube.com/iframe_api"></script>
+
+</body>
+</html>
