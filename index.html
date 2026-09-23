@@ -18,18 +18,19 @@
       font-family: Arial, sans-serif;
     }
 
-.player {
-  position: fixed;
-  left: 20px;
-  bottom: 20px;
-  width: min(300px, 65vw);
-  aspect-ratio: 16 / 9;
-  box-shadow: 0 8px 30px rgba(0,0,0,.75);
-  border: 2px solid rgba(255,255,255,.35);
-  border-radius: 10px;
-  overflow: hidden;
-  background: #000;
-}
+    .player {
+      position: fixed;
+      left: 50%;
+      bottom: 4vh;
+      transform: translateX(-50%);
+      width: min(720px, 88vw);
+      aspect-ratio: 16 / 9;
+      box-shadow: 0 8px 30px rgba(0,0,0,.75);
+      border: 2px solid rgba(255,255,255,.35);
+      border-radius: 10px;
+      overflow: hidden;
+      background: #000;
+    }
 
     #player {
       width: 100%;
@@ -84,6 +85,10 @@
       }
     }
   </script>
+
+  <script src="https://www.youtube.com/iframe_api"></script>
+</body>
+</html>
 
   <script src="https://www.youtube.com/iframe_api"></script>
 </body>
