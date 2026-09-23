@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Halloween 2026: The Ultimate Spooky Party</title>
+
   <style>
     html, body {
       width: 100%;
@@ -21,9 +22,9 @@
     .player {
       position: fixed;
       left: 50%;
-      bottom: 4vh;
-      transform: translateX(-50%);
-      width: min(720px, 88vw);
+      top: 55%;
+      transform: translate(-50%, -50%);
+      width: min(300px, 65vw);
       aspect-ratio: 16 / 9;
       box-shadow: 0 8px 30px rgba(0,0,0,.75);
       border: 2px solid rgba(255,255,255,.35);
@@ -39,13 +40,14 @@
 
     @media (max-width: 700px) {
       .player {
-        bottom: 2vh;
-        width: 94vw;
+        width: 70vw;
       }
     }
   </style>
 </head>
+
 <body>
+
   <div class="player">
     <div id="player"></div>
   </div>
@@ -56,40 +58,89 @@
     let ytPlayer;
 
     function onYouTubeIframeAPIReady() {
+
       ytPlayer = new YT.Player("player", {
+
         width: "100%",
         height: "100%",
+
         playerVars: {
           listType: "playlist",
           list: PLAYLIST_ID,
           rel: 0,
           playsinline: 1
         },
+
         events: {
-          onReady: startRadioStylePlayback
+          onReady: startRadioStylePlayback,
+          onError: skipUnavailableVideo,
+          onStateChange: onPlayerStateChange
         }
+
       });
     }
 
+
     function startRadioStylePlayback(event) {
+
       const player = event.target;
 
-      // YouTube exposes the playlist after it has loaded.
-      // Shuffle it, then choose a random starting position.
-      const playlist = player.getPlaylist();
+      // Turn playlist shuffle on.
+      player.setShuffle(true);
 
-      if (playlist && playlist.length) {
-        player.setShuffle(true);
-        const randomIndex = Math.floor(Math.random() * playlist.length);
-        player.playVideoAt(randomIndex);
+      // Give YouTube time to load the playlist.
+      setTimeout(function() {
+
+        const playlist = player.getPlaylist();
+
+        if (playlist && playlist.length) {
+
+          // Start with a different random song each time.
+          const randomIndex =
+            Math.floor(Math.random() * playlist.length);
+
+          player.playVideoAt(randomIndex);
+        }
+
+      }, 1000);
+    }
+
+
+    function skipUnavailableVideo(event) {
+
+      console.log(
+        "Video unavailable. Skipping to the next song."
+      );
+
+      // Move to the next song instead of stopping the radio.
+      setTimeout(function() {
+
+        if (ytPlayer) {
+          ytPlayer.nextVideo();
+        }
+
+      }, 500);
+    }
+
+
+    function onPlayerStateChange(event) {
+
+      // If a song finishes normally, continue to the next song.
+      if (event.data === YT.PlayerState.ENDED) {
+
+        setTimeout(function() {
+
+          if (ytPlayer) {
+            ytPlayer.nextVideo();
+          }
+
+        }, 300);
       }
     }
+
   </script>
 
   <script src="https://www.youtube.com/iframe_api"></script>
-</body>
-</html>
 
-  <script src="https://www.youtube.com/iframe_api"></script>
 </body>
 </html>
