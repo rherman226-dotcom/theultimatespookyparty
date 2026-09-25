@@ -14,23 +14,25 @@
       background: #000;
     }
 
-    body {
-      background: url("halloween-background.png") center center / 100% 100% no-repeat fixed;
+    /* Full-screen video background */
+    #background-video {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      object-fit: cover;
+      z-index: 0;
     }
 
     .player {
-  position: fixed;
-  width: 160px;
-  height: 90px;
-  top: 15px;
-  right: 15px;
-  z-index: 10;
-}
-
-#player {
-  width: 100%;
-  height: 100%;
-}
+      position: fixed;
+      width: 160px;
+      height: 90px;
+      top: 15px;
+      right: 15px;
+      z-index: 10;
+    }
 
     #player {
       width: 100%;
@@ -47,6 +49,12 @@
 
 <body>
 
+  <!-- Full-screen looping background video -->
+  <video id="background-video" autoplay muted loop playsinline>
+    <source src="xphoto_1790309430342.mp4" type="video/mp4">
+  </video>
+
+  <!-- YouTube radio player -->
   <div class="player">
     <div id="player"></div>
   </div>
@@ -138,6 +146,11 @@
     }
 
   </script>
+
+  <script src="https://www.youtube.com/iframe_api"></script>
+
+</body>
+</html>
 
   <script src="https://www.youtube.com/iframe_api"></script>
 
